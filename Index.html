@@ -1,0 +1,167 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Arcium Quiz — 10 Questions</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#94a3b8;--accent:#60a5fa;--ok:#34d399}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,'Helvetica Neue',Arial;background:linear-gradient(180deg,#071029 0%, #071520 100%);color:#e6eef8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px}
+    .wrap{width:100%;max-width:900px}
+    header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    h1{margin:0;font-size:20px}
+    p.lead{margin:0;color:var(--muted)}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);padding:20px;border-radius:12px;box-shadow:0 6px 24px rgba(2,6,23,0.6)}
+    ol.questions{padding-left:18px;margin:0}
+    li.q{margin-bottom:16px}
+    .q h3{margin:0 0 8px 0;font-size:16px}
+    .opts{display:flex;flex-direction:column;gap:8px}
+    label.opt{background:#071a2b;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.02);cursor:pointer;display:flex;align-items:center;gap:10px}
+    input[type=radio]{accent-color:var(--accent)}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    button{background:var(--accent);color:#04263d;border:none;padding:10px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+    button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    .result{margin-top:12px;padding:12px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border:1px solid rgba(255,255,255,0.03)}
+    .answer{margin-top:10px;color:var(--muted);font-size:14px}
+    footer{margin-top:14px;color:var(--muted);font-size:13px}
+    .badge{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.02);font-weight:600}
+    @media (max-width:640px){body{padding:18px}.card{padding:14px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>Arcium Quiz — 10 Questions</h1>
+        <p class="lead">Interactive quiz built for GitHub Pages. Select answers and check your score.</p>
+      </div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
+        <span class="badge">Static HTML</span>
+      </div>
+    </header><div class="card" id="app">
+  <ol class="questions" id="questionsList"></ol>
+
+  <div class="controls">
+    <button id="checkBtn">Check Answers</button>
+    <button class="secondary" id="resetBtn">Reset</button>
+    <button class="secondary" id="showAnsBtn">Show Correct Answers</button>
+  </div>
+
+  <div id="result" class="result" style="display:none"></div>
+
+  <div class="answer" id="answersText" style="display:none"></div>
+
+  <footer>
+    Built for GitHub Pages — drop this file into a repo and enable Pages (branch: main / root).
+  </footer>
+</div>
+
+  </div>  <script>
+    // QUESTIONS DATA
+    const quizData = [
+      {
+        q: "What is the main goal of Arcium?",
+        opts: ["Improve tokenomics","Enable computation over encrypted data","Replace cloud storage","Offer faster block times"],
+        ans: 1
+      },
+      {
+        q: "Which cryptographic method powers Arcium?",
+        opts: ["Zero-Knowledge Proofs","Multi-Party Computation (MPC)","Homomorphic Encryption","Ring Signatures"],
+        ans: 1
+      },
+      {
+        q: "Arcium is best described as:",
+        opts: ["A blockchain explorer","A decentralized wallet","An encrypted supercomputer","A stablecoin network"],
+        ans: 2
+      },
+      {
+        q: "Which of the following is NOT a key privacy benefit of Arcium?",
+        opts: ["Full Privacy","Verifiable Computation","Tokenized NFTs","Easy Integrations"],
+        ans: 2
+      },
+      {
+        q: "Which industries can benefit most from Arcium’s technology?",
+        opts: ["Gaming and NFTs only","AI, DeFi, and DePIN","E-commerce only","Only Government projects"],
+        ans: 1
+      },
+      {
+        q: "What is the first phase in Arcium’s Road to Mainnet?",
+        opts: ["Public Testnet (Arc 2)","Governance Launch","Private Testnet (Arc 1)","Mainnet (Arc 3)"],
+        ans: 2
+      },
+      {
+        q: "What happens during the Public Testnet (Arc 2)?",
+        opts: ["Testing in a closed cohort only","Validator onboarding and public participation","Deploying full mainnet applications","Retiring the test network"],
+        ans: 1
+      },
+      {
+        q: "What does Arcium allow developers to do easily?",
+        opts: ["Launch tokens automatically","Integrate encrypted computing with few lines of code","Replace Solana nodes","Run PoW mining operations"],
+        ans: 1
+      },
+      {
+        q: "Which predecessor project contributed to Arcium’s development?",
+        opts: ["Tornado Cash","Elusiv","Aztec","Iron Fish"],
+        ans: 1
+      },
+      {
+        q: "What is a key characteristic of Arcium’s computations?",
+        opts: ["Transparent and non-verifiable","Centralized and fast","Trustless and verifiable","Off-chain only"],
+        ans: 2
+      }
+    ];
+
+    // RENDER
+    const questionsList = document.getElementById('questionsList');
+    quizData.forEach((item, i) => {
+      const li = document.createElement('li'); li.className = 'q';
+      const qTitle = document.createElement('h3'); qTitle.innerText = `${i+1}. ${item.q}`;
+      const optsDiv = document.createElement('div'); optsDiv.className='opts';
+
+      item.opts.forEach((opt, j) => {
+        const id = `q${i}_opt${j}`;
+        const label = document.createElement('label'); label.className='opt';
+        const input = document.createElement('input'); input.type='radio'; input.name=`q${i}`; input.id=id; input.value=j;
+        const span = document.createElement('span'); span.innerText = opt;
+        label.appendChild(input); label.appendChild(span);
+        optsDiv.appendChild(label);
+      });
+
+      li.appendChild(qTitle); li.appendChild(optsDiv); questionsList.appendChild(li);
+    });
+
+    // ACTIONS
+    const checkBtn = document.getElementById('checkBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const showAnsBtn = document.getElementById('showAnsBtn');
+    const resultEl = document.getElementById('result');
+    const answersText = document.getElementById('answersText');
+
+    checkBtn.addEventListener('click', () => {
+      let score=0; let answered=0; let total=quizData.length;
+      quizData.forEach((item,i)=>{
+        const sel = document.querySelector(`input[name=q${i}]:checked`);
+        if(sel){answered++; if(Number(sel.value)===item.ans) score++;}
+      });
+      resultEl.style.display='block';
+      resultEl.innerHTML=`You answered ${answered} / ${total} questions. <strong>Score: ${score} / ${total}</strong>`;
+    });
+
+    resetBtn.addEventListener('click', ()=>{
+      document.querySelectorAll('input[type=radio]').forEach(r=>r.checked=false);
+      resultEl.style.display='none';
+      answersText.style.display='none';
+    });
+
+    showAnsBtn.addEventListener('click', ()=>{
+      answersText.style.display='block';
+      answersText.innerHTML = '<strong>Correct answers:</strong><br>' + quizData.map((it,idx)=>{
+        return `${idx+1}. ${it.opts[it.ans]}`;
+      }).join('<br>');
+    });
+
+    // OPTIONAL: deep-link selected answers in URL (simple)
+  </script></body>
+</html>
