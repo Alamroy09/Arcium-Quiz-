@@ -2,215 +2,316 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Arcium Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-
-    body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #050b1a, #0a1633, #081024);
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-      margin: 0;
+    :root{
+      --bg1:#0a0f1f;
+      --bg2:#1a2238;
+      --accent:#38bdf8;
+      --good:#16a34a;
+      --bad:#ef4444;
     }
 
-    .quiz-container {
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 18px;
-      padding: 35px;
-      max-width: 600px;
-      width: 90%;
-      box-shadow: 0 0 25px rgba(0, 255, 200, 0.1);
-      text-align: center;
-      backdrop-filter: blur(10px);
-      transition: 0.3s;
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    body{
+      font-family:'Inter',system-ui,Segoe UI,Roboto,sans-serif;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:radial-gradient(circle at top left,var(--bg1),var(--bg2));
+      color:#f1f5f9;
+      padding:20px;
     }
 
-    .quiz-container:hover {
-      box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
+    .container{
+      width:100%;
+      max-width:720px;
+      background:rgba(17,24,39,0.78);
+      padding:32px;
+      border-radius:20px;
+      box-shadow:0 12px 50px rgba(0,0,0,0.6);
+      backdrop-filter:blur(10px);
+      border:1px solid rgba(255,255,255,0.05);
+      text-align:center;
+      animation: fadeIn .5s ease;
     }
 
-    h1 {
-      font-size: 2.4rem;
-      color: #00e0ff;
-      text-shadow: 0 0 10px #00e0ff, 0 0 20px #00e0ff, 0 0 30px #00e0ff;
-      margin-bottom: 15px;
-      animation: neonPulse 1.5s infinite alternate;
+    @keyframes fadeIn {
+      from {opacity:0; transform:translateY(10px);}
+      to {opacity:1; transform:translateY(0);}
     }
 
-    @keyframes neonPulse {
-      0% { text-shadow: 0 0 10px #00e0ff, 0 0 20px #00e0ff, 0 0 30px #00e0ff; }
-      50% { text-shadow: 0 0 20px #00fff0, 0 0 30px #00fff0, 0 0 40px #00fff0; }
-      100% { text-shadow: 0 0 10px #00e0ff, 0 0 20px #00e0ff, 0 0 30px #00e0ff; }
+    h1{
+      margin-bottom:6px;
+      color:var(--accent);
+      letter-spacing:2px;
+      font-size:32px;
+      font-weight:800;
     }
 
-    p {
-      font-size: 1rem;
-      color: #ccc;
-      margin-bottom: 20px;
+    h2{margin-bottom:14px;font-weight:600}
+    p.lead{opacity:0.85;margin-bottom:22px;font-size:15px}
+
+    /* Buttons */
+    .btn{
+      display:inline-block;
+      background:linear-gradient(135deg,var(--accent),#0ea5e9);
+      color:#0c1a27;
+      border:none;
+      padding:12px 20px;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+      transition:all .2s ease;
+      margin:8px 6px 0 0;
+      box-shadow:0 4px 12px rgba(56,189,248,0.25);
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(56,189,248,0.35)}
+    .btn:active{transform:scale(.98)}
+    .btn.secondary{
+      background:transparent;
+      color:#cbd5e1;
+      border:1px solid rgba(255,255,255,0.12);
+      box-shadow:none;
+    }
+    .btn.secondary:hover{background:rgba(255,255,255,0.05)}
+
+    /* Quiz */
+    .hidden{display:none}
+    #questionBox{margin-top:8px}
+    .questionTitle{font-size:18px;margin-bottom:14px;font-weight:600}
+    .options{display:flex;flex-direction:column;gap:12px;text-align:left}
+    .option{
+      background:rgba(255,255,255,0.04);
+      padding:14px 16px;
+      border-radius:12px;
+      cursor:pointer;
+      transition:all .2s ease;
+      border:1px solid rgba(255,255,255,0.06);
+      font-size:15px;
+    }
+    .option:hover{transform:translateY(-2px);background:rgba(255,255,255,0.07)}
+    .option.selected{
+      background:linear-gradient(90deg,rgba(56,189,248,0.18),rgba(56,189,248,0.05));
+      border-color:rgba(56,189,248,0.5);
     }
 
-    button {
-      background: linear-gradient(90deg, #00b4d8, #0077b6);
-      border: none;
-      border-radius: 10px;
-      padding: 10px 22px;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-top: 15px;
-      transition: all 0.3s ease;
+    /* Progress bar */
+    #progress{
+      height:8px;
+      background:rgba(255,255,255,0.08);
+      border-radius:6px;
+      overflow:hidden;
+      margin:18px 0;
+    }
+    #progressFill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--accent),#0ea5e9);
+      transition:width .4s ease;
     }
 
-    button:hover {
-      background: linear-gradient(90deg, #00e0ff, #00b4d8);
-      transform: scale(1.06);
+    /* answers list */
+    .answers-list{margin-top:18px;text-align:left;background:rgba(255,255,255,0.03);padding:14px;border-radius:12px;font-size:14px;line-height:1.5}
+    .answers-list h3{margin:0 0 8px 0;color:var(--accent)}
+    .answers-list p{margin:8px 0}
+
+    /* result */
+    #resultWrap{text-align:center}
+    #scoreBox{
+      font-weight:800;
+      font-size:22px;
+      margin:14px 0 20px 0;
+      display:inline-block;
+      background:linear-gradient(135deg,#38bdf8,#0ea5e9);
+      color:#0c1a27;
+      padding:8px 18px;
+      border-radius:30px;
+      box-shadow:0 4px 12px rgba(56,189,248,0.3);
     }
 
-    .option {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 10px;
-      margin: 10px 0;
-      cursor: pointer;
-      transition: 0.3s;
+    @media (max-width:520px){
+      .container{padding:20px}
+      h1{font-size:26px}
     }
-
-    .option:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .hidden { display: none; }
-
-    #result { font-size: 1.4rem; color: #00ffb3; margin-top: 15px; }
-
-    .discord-btn {
-      background: linear-gradient(90deg, #5865F2, #4752C4);
-      border-radius: 10px;
-      padding: 10px 25px;
-      color: white;
-      margin-top: 15px;
-      font-size: 1rem;
-      display: inline-block;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-
-    .discord-btn:hover {
-      background: linear-gradient(90deg, #6c76ff, #5865F2);
-      transform: scale(1.05);
-    }
-
-    footer {
-      margin-top: 25px;
-      font-size: 0.85rem;
-      color: #888;
-    }
-
-    .glow { color: #00f6ff; text-shadow: 0 0 15px #00f6ff; font-weight: 700; }
   </style>
 </head>
 <body>
-  <div class="quiz-container">
-    <div id="start-screen">
-      <h1>⚡ Arcium Quiz</h1>
-      <p>Test your knowledge about <span class="glow">Umbra</span>, <span class="glow">Dark Pool</span> & <span class="glow">Nodes</span>.  
-      Prove yourself as a <b>GMPCHAD</b>!</p>
-      <button id="start-btn">Start Quiz</button>
+  <div class="container">
+    <!-- START PAGE -->
+    <div id="start-page">
+      <h1>ARCIUM</h1>
+      <h2>Test Your Knowledge</h2>
+      <p class="lead">
+        Explore Arcium’s privacy-focused tech — from Dark Pool trading to Umbra privacy apps and the nodes that power them. Ready to challenge yourself?
+      </p>
+      <button class="btn" id="startBtn">Start Quiz</button>
     </div>
 
-    <div id="quiz-screen" class="hidden">
-      <h2 id="question"></h2>
-      <div id="options"></div>
-      <button id="next-btn" class="hidden">Next</button>
+    <!-- QUIZ PAGE -->
+    <div id="quiz-page" class="hidden">
+      <div id="progress"><div id="progressFill"></div></div>
+      <div id="questionBox">
+        <div class="questionTitle" id="questionText"></div>
+        <div class="options" id="options"></div>
+      </div>
+      <div style="margin-top:16px;">
+        <button class="btn" id="nextBtn" disabled>Next</button>
+      </div>
     </div>
 
-    <div id="result-screen" class="hidden">
-      <h2>🎉 Quiz Completed!</h2>
-      <p id="result"></p>
-      <button id="restart-btn">Restart</button>
-      <a href="https://discord.gg/arcium" class="discord-btn" target="_blank">Join Discord</a>
+    <!-- RESULT PAGE -->
+    <div id="result-page" class="hidden">
+      <div id="resultWrap">
+        <h2>Quiz Complete</h2>
+        <div id="scoreBox"></div>
+        <div style="margin-bottom:12px;">
+          <button class="btn" id="restartBtn">🔁 Restart Quiz</button>
+          <button class="btn secondary" id="showAnswersBtn">💡 Show Correct Answers</button>
+          <button class="btn" onclick="window.open('https://discord.gg/arcium','_blank')">💬 Join Discord</button>
+        </div>
+        <div id="answersListWrap" class="hidden">
+          <div class="answers-list" id="answersList"></div>
+        </div>
+        <p style="text-align:center;opacity:0.6;margin-top:16px;font-size:12px;">
+          Build by Altab Sk for Arcium Community
+        </p>
+      </div>
     </div>
-
-    <footer>Built by Rafiqujaman Sk for Arcium Community ⚡</footer>
   </div>
 
   <script>
     const quizData = [
-      { question: "What is Arcium’s core mission?", options: ["To build a decentralized compute platform for encrypted data","To launch a social app","To trade private assets","To build an exchange only"], answer: 0 },
-      { question: "What makes Arcium different from traditional cloud computing?", options: ["It can process encrypted data without decrypting","It is cheaper to use","It provides free storage","It runs only on testnet"], answer: 0 },
-      { question: "What is the purpose of the Arcium Testnet?", options: ["To test network stability and performance","To reward validators only","To host community chats","To distribute NFTs"], answer: 0 },
-      { question: "Which phase marks Arcium’s public launch?", options: ["Alpha","Beta","Mainnet","Private Test"], answer: 2 },
-      { question: "Where can you track Arcium’s development?", options: ["GitHub and Docs","Reddit","Telegram only","Medium only"], answer: 0 },
-
-      { question: "What is Umbra in the Arcium ecosystem?", options: ["A privacy-first app for sending, receiving, and swapping assets on Solana","A validator tool","A node monitoring system","A liquidity pool for Ethereum"], answer: 0 },
-      { question: "Which blockchain does Umbra operate on?", options: ["Solana","Ethereum","Polygon","Avalanche"], answer: 0 },
-      { question: "Umbra's core goal?", options: ["Enable private financial transactions","Host NFTs privately","Mine private blocks","Build DAO voting tools"], answer: 0 },
-      { question: "Umbra is focused on?", options: ["Privacy & user control","Fast trading volume","Public visibility","AI-driven automation"], answer: 0 },
-      { question: "Unique Umbra feature?", options: ["Hides transaction details via encrypted compute","Supports meme tokens only","Invite-only devs","Auto-stakes every asset"], answer: 0 },
-
-      { question: "What is Dark Pool?", options: ["Private trading app built on Arcium's encrypted compute layer","Liquidity mining","Telegram bot","Game for privacy testing"], answer: 0 },
-      { question: "Dark Pool solves?", options: ["Private trading without revealing order details","Speeds public trades","Connects wallets automatically","Generates trading charts"], answer: 0 },
-      { question: "Dark Pool privacy?", options: ["Encrypted computation matches orders privately","Deletes trade history","Hides blockchain prices","Only verified traders"], answer: 0 },
-      { question: "Dark Pool users?", options: ["Traders wanting private orders","Casual gamers","NFT creators","Only node operators"], answer: 0 },
-      { question: "Arcium layer powering Dark Pool?", options: ["Encrypted Compute Layer","Liquidity Aggregation","Explorer Layer","Data Storage"], answer: 0 },
-
-      { question: "What is an ArxNode?", options: ["Node performing secure computations on encrypted data","Block explorer tool","Validator for NFTs","Social identity verifier"], answer: 0 },
-      { question: "ArxNodes form?", options: ["Clusters for privacy-preserving computations","Mining farms","Public ledgers","Storage vaults"], answer: 0 },
-      { question: "Who can run an Arcium node?", options: ["Anyone following Arcium Docs guide","Only core team","Institutional investors","Users with 10k tokens"], answer: 0 },
-      { question: "Why run a node?", options: ["Processes encrypted computations & decentralizes network","Mines new tokens","Staking rewards only","Verifies social logins"], answer: 0 },
-      { question: "Where to find node instructions?", options: ["Arcium Docs site","Discord messages","Random blogs","YouTube tutorials"], answer: 0 }
+      { question: "What is Arcium’s core mission?", options: ["To build a social network", "To create a decentralized compute platform for encrypted data", "To launch a new blockchain token", "To provide cloud storage only"], answer: 1 },
+      { question: "Which technology powers Arcium’s privacy layer?", options: ["Homomorphic Encryption", "Blockchain", "AI Computation", "Quantum Computing"], answer: 0 },
+      { question: "What stage follows Testnet in Arcium’s roadmap?", options: ["Alpha Phase", "Beta Phase", "Mainnet Launch", "Private Testing"], answer: 2 },
+      { question: "What makes Arcium different from traditional cloud computing?", options: ["It is faster", "It can process encrypted data without decrypting", "It uses free storage", "It runs only on mobile"], answer: 1 },
+      { question: "What is the purpose of the Arcium testnet?", options: ["To reward validators", "To test network stability and performance", "To distribute tokens", "To run advertisements"], answer: 1 },
+      { question: "What does FHE stand for?", options: ["Full Homomorphic Encryption", "Fast Hash Encryption", "File Hosting Engine", "Fully Hosted Environment"], answer: 0 },
+      { question: "Who can participate in the Arcium testnet?", options: ["Only developers", "Only investors", "Anyone interested", "Only beta testers"], answer: 2 },
+      { question: "Where can you track Arcium’s development?", options: ["GitHub and Docs", "Reddit", "Telegram only", "Medium only"], answer: 0 },
+      { question: "Which phase marks Arcium’s public launch?", options: ["Alpha", "Beta", "Mainnet", "Testnet"], answer: 2 },
+      { question: "What is Arcium primarily focused on?", options: ["Gaming", "AI tools", "Secure computation on encrypted data", "DeFi tokens"], answer: 2 },
+      { question: "What is Umbra in Arcium?", options:["Privacy app platform","Cloud storage","DeFi token","Gaming network"], answer:0},
+      { question: "What is Dark Pool?", options:["Private trading network","AI computation layer","Blockchain explorer","Validator reward program"], answer:0},
+      { question: "What powers Arcium nodes?", options:["Decentralized network","Single server","Cloud only","Local apps"], answer:0},
+      { question: "What type of data can Arcium process securely?", options:["Encrypted data","Plain data","Images only","Videos only"], answer:0},
+      { question: "Who can join Arcium node test?", options:["Anyone","Only developers","Only investors","Beta testers"], answer:0},
+      { question: "Where to find Arcium roadmap?", options:["GitHub","Reddit","Medium","Discord"], answer:0},
+      { question: "Which phase is public launch?", options:["Alpha","Beta","Mainnet","Testnet"], answer:2},
+      { question: "Main focus of Arcium?", options:["Secure computation on encrypted data","Gaming","AI tools","DeFi"], answer:0},
+      { question: "Purpose of Arcium testnet?", options:["Network testing","Rewards","Token distribution","Ads"], answer:0},
+      { question: "What does FHE stand for?", options:["Full Homomorphic Encryption","Fast Hash Encryption","File Hosting","Hosted Environment"], answer:0},
     ];
-
-    const startBtn = document.getElementById("start-btn");
-    const quizScreen = document.getElementById("quiz-screen");
-    const startScreen = document.getElementById("start-screen");
-    const resultScreen = document.getElementById("result-screen");
-    const questionEl = document.getElementById("question");
-    const optionsEl = document.getElementById("options");
-    const nextBtn = document.getElementById("next-btn");
-    const resultEl = document.getElementById("result");
-    const restartBtn = document.getElementById("restart-btn");
 
     let currentQuestion = 0;
     let score = 0;
+    let selectedAnswer = null;
 
-    startBtn.onclick = () => {
-      startScreen.classList.add("hidden");
-      quizScreen.classList.remove("hidden");
-      loadQuestion();
-    };
+    const startPage = document.getElementById('start-page');
+    const quizPage = document.getElementById('quiz-page');
+    const resultPage = document.getElementById('result-page');
+    const questionText = document.getElementById('questionText');
+    const optionsWrap = document.getElementById('options');
+    const nextBtn = document.getElementById('nextBtn');
+    const scoreBox = document.getElementById('scoreBox');
+    const restartBtn = document.getElementById('restartBtn');
+    const showAnswersBtn = document.getElementById('showAnswersBtn');
+    const answersListWrap = document.getElementById('answersListWrap');
+    const answersList = document.getElementById('answersList');
+    const progressFill = document.getElementById('progressFill');
 
-    function loadQuestion() {
+    document.getElementById('startBtn').addEventListener('click', startQuiz);
+    nextBtn.addEventListener('click', nextQuestion);
+    restartBtn.addEventListener('click', restartQuiz);
+    showAnswersBtn.addEventListener('click', toggleAnswers);
+
+    function startQuiz(){
+      startPage.classList.add('hidden');
+      resultPage.classList.add('hidden');
+      answersListWrap.classList.add('hidden');
+      score = 0; currentQuestion = 0;
+      showQuestion();
+      quizPage.classList.remove('hidden');
+    }
+
+    function showQuestion(){
+      selectedAnswer = null;
+      nextBtn.disabled = true;
       const q = quizData[currentQuestion];
-      questionEl.textContent = q.question;
-      optionsEl.innerHTML = "";
-      nextBtn.classList.add("hidden");
-      q.options.forEach((opt, i) => {
-        const div = document.createElement("div");
-        div.textContent = opt;
-        div.classList.add("option");
-        div.onclick = () => selectOption(i);
-        optionsEl.appendChild(div);
+      questionText.textContent = `Q${currentQuestion + 1}. ${q.question}`;
+      optionsWrap.innerHTML = '';
+      updateProgress();
+
+      q.options.forEach((opt, idx) => {
+        const d = document.createElement('div');
+        d.className = 'option';
+        d.textContent = opt;
+        d.dataset.index = idx;
+        d.addEventListener('click', () => selectAnswer(idx));
+        optionsWrap.appendChild(d);
       });
     }
 
-    function selectOption(i) {
-      const q = quizData[currentQuestion];
-      const allOptions = document.querySelectorAll(".option");
-      allOptions.forEach((opt, index) => {
-        opt.style.pointerEvents = "none";
-        if(index === q.answer) opt.style.background = "#00ff99";
-        else if(index === i) opt.style.background = "#ff4d4d";
+    function selectAnswer(idx){
+      selectedAnswer = idx;
+      nextBtn.disabled = false;
+      const optionEls = optionsWrap.querySelectorAll('.option');
+      optionEls.forEach((el, i) => {
+        el.classList.remove('selected');
+        if(i === idx) el.classList.add('selected');
       });
-      if(i === q.answer) score++;
-      nextBtn.classList.remove("hidden");
     }
 
-    nextBtn.onclick = () => {
-      currentQuestion
+    function nextQuestion(){
+      if(selectedAnswer === quizData[currentQuestion].answer){
+        score++;
+      }
+      currentQuestion++;
+      if(currentQuestion < quizData.length){
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function updateProgress(){
+      const percent = ((currentQuestion) / quizData.length) * 100;
+      progressFill.style.width = percent + "%";
+    }
+
+    function showResult(){
+      quizPage.classList.add('hidden');
+      resultPage.classList.remove('hidden');
+      scoreBox.textContent = `${score} / ${quizData.length}`;
+      generateAnswersList();
+      answersListWrap.classList.add('hidden');
+      progressFill.style.width = "100%";
+    }
+
+    function generateAnswersList(){
+      answersList.innerHTML = '';
+      quizData.forEach((q,i) => {
+        const p = document.createElement('p');
+        p.innerHTML = `<strong>Q${i+1}:</strong> ${q.question}<br>✅ <em>${q.options[q.answer]}</em>`;
+        answersList.appendChild(p);
+      });
+    }
+
+    function toggleAnswers(){
+      answersListWrap.classList.toggle('hidden');
+    }
+
+    function restartQuiz(){
+      answersListWrap.classList.add('hidden');
+      startPage.classList.remove('hidden');
+      resultPage.classList.add('hidden');
+      progressFill.style.width = "0%";
+    }
+  </script>
+</body>
+</html>
