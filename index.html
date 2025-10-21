@@ -36,17 +36,10 @@
     }
 
     h1 {
-      font-size: 2.4rem;
+      font-size: 2.2rem;
       color: #00e0ff;
-      text-shadow: 0 0 10px #00e0ff, 0 0 20px #00e0ff, 0 0 30px #00e0ff;
+      text-shadow: 0 0 10px #00e0ff;
       margin-bottom: 15px;
-      animation: neonPulse 1.5s infinite alternate;
-    }
-
-    @keyframes neonPulse {
-      0% { text-shadow: 0 0 10px #00e0ff, 0 0 20px #00e0ff, 0 0 30px #00e0ff; }
-      50% { text-shadow: 0 0 20px #00fff0, 0 0 30px #00fff0, 0 0 40px #00fff0; }
-      100% { text-shadow: 0 0 10px #00e0ff, 0 0 20px #00e0ff, 0 0 30px #00e0ff; }
     }
 
     p {
@@ -85,9 +78,15 @@
       background: rgba(255, 255, 255, 0.2);
     }
 
-    .hidden { display: none; }
+    .hidden {
+      display: none;
+    }
 
-    #result { font-size: 1.4rem; color: #00ffb3; margin-top: 15px; }
+    #result {
+      font-size: 1.4rem;
+      color: #00ffb3;
+      margin-top: 15px;
+    }
 
     .discord-btn {
       background: linear-gradient(90deg, #5865F2, #4752C4);
@@ -112,15 +111,19 @@
       color: #888;
     }
 
-    .glow { color: #00f6ff; text-shadow: 0 0 15px #00f6ff; font-weight: 700; }
+    .glow {
+      color: #00f6ff;
+      text-shadow: 0 0 15px #00f6ff;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
   <div class="quiz-container">
     <div id="start-screen">
-      <h1>⚡ Arcium Quiz</h1>
-      <p>Test your knowledge about <span class="glow">Umbra</span>, <span class="glow">Dark Pool</span> & <span class="glow">Nodes</span>.  
-      Prove yourself as a <b>GMPCHAD</b>!</p>
+      <h1>⚡ Arcium Knowledge Quiz</h1>
+      <p>Think you know <span class="glow">Umbra</span>, <span class="glow">Dark Pool</span> & <span class="glow">Nodes</span>?  
+      Test your knowledge and prove you're a real <b>GMPCHAD</b>!</p>
       <button id="start-btn">Start Quiz</button>
     </div>
 
@@ -137,34 +140,34 @@
       <a href="https://discord.gg/arcium" class="discord-btn" target="_blank">Join Discord</a>
     </div>
 
-    <footer>Built by Rafiqujaman Sk for Arcium Community ⚡</footer>
+    <footer>Built by Rafiqujaman Sk for the Arcium Community ⚡</footer>
   </div>
 
   <script>
     const quizData = [
-      { question: "What is Arcium’s core mission?", options: ["To build a decentralized compute platform for encrypted data","To launch a social app","To trade private assets","To build an exchange only"], answer: 0 },
-      { question: "What makes Arcium different from traditional cloud computing?", options: ["It can process encrypted data without decrypting","It is cheaper to use","It provides free storage","It runs only on testnet"], answer: 0 },
-      { question: "What is the purpose of the Arcium Testnet?", options: ["To test network stability and performance","To reward validators only","To host community chats","To distribute NFTs"], answer: 0 },
-      { question: "Which phase marks Arcium’s public launch?", options: ["Alpha","Beta","Mainnet","Private Test"], answer: 2 },
-      { question: "Where can you track Arcium’s development?", options: ["GitHub and Docs","Reddit","Telegram only","Medium only"], answer: 0 },
+      { question: "What is Arcium’s core mission?", options: ["To build a decentralized compute platform for encrypted data", "To launch a social app", "To trade private assets", "To build an exchange only"], answer: 0 },
+      { question: "What makes Arcium different from traditional cloud computing?", options: ["It can process encrypted data without decrypting", "It is cheaper to use", "It provides free storage", "It runs only on testnet"], answer: 0 },
+      { question: "What is the purpose of the Arcium Testnet?", options: ["To test network stability and performance", "To reward validators only", "To host community chats", "To distribute NFTs"], answer: 0 },
+      { question: "Which phase marks Arcium’s public launch?", options: ["Alpha", "Beta", "Mainnet", "Private Test"], answer: 2 },
+      { question: "Where can you track Arcium’s development?", options: ["GitHub and Docs", "Reddit", "Telegram only", "Medium only"], answer: 0 },
 
-      { question: "What is Umbra in the Arcium ecosystem?", options: ["A privacy-first app for sending, receiving, and swapping assets on Solana","A validator tool","A node monitoring system","A liquidity pool for Ethereum"], answer: 0 },
-      { question: "Which blockchain does Umbra operate on?", options: ["Solana","Ethereum","Polygon","Avalanche"], answer: 0 },
-      { question: "Umbra's core goal?", options: ["Enable private financial transactions","Host NFTs privately","Mine private blocks","Build DAO voting tools"], answer: 0 },
-      { question: "Umbra is focused on?", options: ["Privacy & user control","Fast trading volume","Public visibility","AI-driven automation"], answer: 0 },
-      { question: "Unique Umbra feature?", options: ["Hides transaction details via encrypted compute","Supports meme tokens only","Invite-only devs","Auto-stakes every asset"], answer: 0 },
+      { question: "What is Umbra in the Arcium ecosystem?", options: ["A privacy-first app for sending, receiving, and swapping assets on Solana", "A validator tool", "A node monitoring system", "A liquidity pool for Ethereum"], answer: 0 },
+      { question: "Which blockchain does Umbra currently operate on?", options: ["Solana", "Ethereum", "Polygon", "Avalanche"], answer: 0 },
+      { question: "What is the core goal of Umbra?", options: ["To enable private financial transactions without exposing wallet addresses", "To host NFTs privately", "To mine private blocks", "To build DAO voting tools"], answer: 0 },
+      { question: "Umbra is focused on which core principle?", options: ["Privacy and user control over financial data", "Fast trading volume growth", "Public transaction visibility", "AI-driven automation"], answer: 0 },
+      { question: "What feature makes Umbra unique compared to normal wallets?", options: ["It hides transaction details using encrypted compute", "It supports meme tokens only", "It is invite-only for developers", "It auto-stakes every asset"], answer: 0 },
 
-      { question: "What is Dark Pool?", options: ["Private trading app built on Arcium's encrypted compute layer","Liquidity mining","Telegram bot","Game for privacy testing"], answer: 0 },
-      { question: "Dark Pool solves?", options: ["Private trading without revealing order details","Speeds public trades","Connects wallets automatically","Generates trading charts"], answer: 0 },
-      { question: "Dark Pool privacy?", options: ["Encrypted computation matches orders privately","Deletes trade history","Hides blockchain prices","Only verified traders"], answer: 0 },
-      { question: "Dark Pool users?", options: ["Traders wanting private orders","Casual gamers","NFT creators","Only node operators"], answer: 0 },
-      { question: "Arcium layer powering Dark Pool?", options: ["Encrypted Compute Layer","Liquidity Aggregation","Explorer Layer","Data Storage"], answer: 0 },
+      { question: "What is Arcium Dark Pool?", options: ["A private trading application built on Arcium’s encrypted compute layer", "A liquidity mining event", "A Telegram trading bot", "A game for testing privacy"], answer: 0 },
+      { question: "What problem does Dark Pool solve?", options: ["It enables private trading without revealing order details", "It speeds up public trades", "It connects DeFi wallets automatically", "It generates trading charts"], answer: 0 },
+      { question: "How does Dark Pool ensure privacy?", options: ["By using encrypted computation to match orders privately", "By deleting trade history", "By hiding prices from the blockchain", "By only allowing verified traders"], answer: 0 },
+      { question: "Dark Pool is mainly designed for which type of users?", options: ["Traders who want to keep order size and strategy private", "Casual gamers", "NFT creators", "Only Arcium node operators"], answer: 0 },
+      { question: "Which Arcium layer powers Dark Pool?", options: ["Encrypted Compute Layer", "Liquidity Aggregation Layer", "Blockchain Explorer Layer", "Data Storage Layer"], answer: 0 },
 
-      { question: "What is an ArxNode?", options: ["Node performing secure computations on encrypted data","Block explorer tool","Validator for NFTs","Social identity verifier"], answer: 0 },
-      { question: "ArxNodes form?", options: ["Clusters for privacy-preserving computations","Mining farms","Public ledgers","Storage vaults"], answer: 0 },
-      { question: "Who can run an Arcium node?", options: ["Anyone following Arcium Docs guide","Only core team","Institutional investors","Users with 10k tokens"], answer: 0 },
-      { question: "Why run a node?", options: ["Processes encrypted computations & decentralizes network","Mines new tokens","Staking rewards only","Verifies social logins"], answer: 0 },
-      { question: "Where to find node instructions?", options: ["Arcium Docs site","Discord messages","Random blogs","YouTube tutorials"], answer: 0 }
+      { question: "What is an ArxNode in the Arcium network?", options: ["A node that performs secure computations on encrypted data", "A block explorer tool", "A validator that mints NFTs", "A social identity verifier"], answer: 0 },
+      { question: "What do ArxNodes form together?", options: ["Clusters that execute privacy-preserving computations", "Mining farms", "Public ledgers", "Storage vaults"], answer: 0 },
+      { question: "Who can run an Arcium node?", options: ["Anyone following the setup guide on Arcium Docs", "Only the Arcium core team", "Institutional investors", "Users with 10k tokens only"], answer: 0 },
+      { question: "Why is running a node important in Arcium?", options: ["It helps process encrypted computations and decentralize the network", "It mines new tokens", "It provides staking rewards only", "It verifies social logins"], answer: 0 },
+      { question: "Where can you find official instructions for running an Arcium node?", options: ["Arcium Docs site", "Discord chat messages", "Random blogs", "YouTube tutorials"], answer: 0 }
     ];
 
     const startBtn = document.getElementById("start-btn");
@@ -205,12 +208,26 @@
       const allOptions = document.querySelectorAll(".option");
       allOptions.forEach((opt, index) => {
         opt.style.pointerEvents = "none";
-        if(index === q.answer) opt.style.background = "#00ff99";
-        else if(index === i) opt.style.background = "#ff4d4d";
+        if (index === q.answer) opt.style.background = "#00ff99";
+        else if (index === i) opt.style.background = "#ff4d4d";
       });
-      if(i === q.answer) score++;
+      if (i === q.answer) score++;
       nextBtn.classList.remove("hidden");
     }
 
     nextBtn.onclick = () => {
-      currentQuestion
+      currentQuestion++;
+      if (currentQuestion < quizData.length) loadQuestion();
+      else showResult();
+    };
+
+    function showResult() {
+      quizScreen.classList.add("hidden");
+      resultScreen.classList.remove("hidden");
+      resultEl.textContent = `You scored ${score} out of ${quizData.length}!`;
+    }
+
+    restartBtn.onclick = () => window.location.reload();
+  </script>
+</body>
+</html>
